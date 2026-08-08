@@ -1,0 +1,57 @@
+algae = {
+	aggressiveness = 2.0	
+	trade_willingness = 0.7
+	bravery = 0.5
+	combat_bravery = 0.75
+
+	military_spending = 1.0
+	colony_spending = 1.5
+
+	federation_acceptance = 0 #-50
+	nap_acceptance = 10
+	commercial_pact_acceptance = 0
+	research_agreement_acceptance = 0
+	defensive_pact_acceptance = 10
+	migration_pact_acceptance = -100
+	loyalty_acceptance = 1.0
+
+	advanced_start_chance = 10
+
+	weapon_preferences = weapon_type_strike_craft
+	armor_ratio = 0.5
+	shields_ratio = 0.5
+
+	threat_modifier = 0.75
+	threat_others_modifier = 2
+	friction_modifier = 1.5
+	claims_modifier = 1.5
+
+	behaviour = {
+		conqueror = yes
+		subjugator = no
+		liberator = no
+		opportunist = yes
+		slaver = yes
+		uplifter = no
+		purger = no
+		displacer = yes
+		dominator = yes
+		infiltrator = no
+		robot_exploiter = no
+		robot_liberator = no
+		propagator = yes
+		multispecies = no
+		crisis_fighter = yes
+	}
+
+	allow = {
+		is_country_type = default
+		is_hive_empire = yes
+        is_wilderness_empire = yes
+	}
+
+
+	weight_modifier = {
+		weight = 1000
+	}
+}
