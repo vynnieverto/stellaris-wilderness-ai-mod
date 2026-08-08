@@ -1,0 +1,213 @@
+algae_military_emergency = {
+	OR = {
+		AND = {
+			highest_threat > 30
+			used_naval_capacity_percent < 0.90
+		}
+		AND = {
+			is_at_war = yes
+			highest_threat > 20
+			used_naval_capacity_percent < 1.00
+		}
+		AND = {
+			highest_threat > 24
+			used_naval_capacity_percent < 1.05
+		}
+		highest_threat > 45
+	}
+}
+
+
+algae_economic_crisis = {
+
+	OR = {
+		has_deficit = energy
+		has_deficit = minerals
+		has_deficit = food
+		resource_stockpile_compare = { resource = energy value < 500 }
+		resource_stockpile_compare = { resource = minerals value < 500 }
+		resource_stockpile_compare = { resource = food value < 500 }
+	}
+}
+
+
+
+algae_foundation_ready = {
+
+	NOT = { algae_economic_crisis = yes }
+	NOT = { has_deficit = energy }
+	NOT = { has_deficit = minerals }
+	NOT = { has_deficit = food}
+	has_monthly_income = { resource = energy value > 15 }
+	has_monthly_income = { resource = minerals value > 12 }
+	has_monthly_income = { resource = food value > 15}
+	resource_stockpile_compare = { resource = energy value > 1500 }
+	resource_stockpile_compare = { resource = minerals value > 1000 }
+	resource_stockpile_compare = { resource = food value > 1000}
+
+}
+
+algae_research_ready = {
+	years_passed > 44
+	NOT = { algae_economic_crisis = yes }
+
+	NOT = { has_deficit = energy }
+	NOT = { has_deficit = minerals }
+	NOT = { has_deficit = food }
+
+	has_monthly_income = { resource = energy value > 25 }
+	has_monthly_income = { resource = minerals value > 20 }
+	has_monthly_income = { resource = food value > 15 }
+
+	resource_stockpile_compare = { resource = energy value > 2500 }
+	resource_stockpile_compare = { resource = minerals value > 1500 }
+	resource_stockpile_compare = { resource = food value > 1000 }
+
+}
+
+
+
+
+
+algae_should_rebuild_fleet = {
+
+	OR = {
+		AND = {
+			is_at_war = yes
+			used_naval_capacity_percent < 0.85
+		}
+		AND = {
+			algae_military_emergency = yes
+			used_naval_capacity_percent < 0.85
+		}
+		AND = {
+			is_at_war = no
+			years_passed < 45
+			NOT = { algae_economic_crisis = yes }
+			used_naval_capacity_percent < 0.60
+		}
+		AND = {
+			is_at_war = no
+			years_passed > 44
+			algae_research_ready = yes
+			used_naval_capacity_percent < 0.85
+		}
+		AND = {
+			is_at_war = no
+			years_passed > 44
+			algae_foundation_ready = yes
+			used_naval_capacity_percent < 0.70
+		}
+		AND = {
+			recently_lost_war = yes
+			algae_foundation_ready = yes
+			used_naval_capacity_percent < 0.75
+		}
+	}
+}
+
+algae_energy_recovery_needed = {
+
+	OR = {
+		has_deficit = energy
+		NOT = { has_monthly_income = { resource = energy value > 25 } }
+		resource_stockpile_compare = { resource = energy value < 4000 }
+	}
+}
+
+algae_minerals_recovery_needed = {
+
+	OR = {
+		has_deficit = minerals
+		NOT = { has_monthly_income = { resource = minerals value > 20 } }
+		resource_stockpile_compare = { resource = minerals value < 2500 }
+	}
+}
+
+algae_food_recovery_needed = {
+	OR = {
+		has_deficit = food
+		NOT = { has_monthly_income = { resource = food value > 25 } }
+		resource_stockpile_compare = { resource = food value < 2500 }
+	}
+}
+
+# Compatibility aliases retained for existing callers.
+algae_basic_econ_recovery_needed = {
+	OR = {
+		algae_energy_recovery_needed = yes
+		algae_minerals_recovery_needed = yes
+		algae_food_recovery_needed = yes
+	}
+}
+
+algae_peacetime_economic_readiness = {
+	is_at_war = no
+	algae_foundation_ready = yes
+}
+
+algae_research_ramp_ready = {
+	algae_research_ready = yes
+}
+
+algae_country_unity_push = {
+	algae_foundation_ready = yes
+	OR = {
+		AND = {
+			years_passed < 80
+			num_ascension_perks < 2
+		}
+		AND = {
+			years_passed < 140
+			num_ascension_perks < 3
+		}
+	}
+}
+
+algae_planet_unity_push = {
+	exists = owner_or_space_owner
+	owner_or_space_owner = {
+		algae_country_unity_push = yes
+	}
+}
+
+algae_good_research_candidate = {
+	OR = {
+		check_modifier_value = { modifier = planet_researchers_produces_mult value > 0.09 }
+		check_modifier_value = { modifier = planet_researchers_physics_research_produces_mult value > 0.09 }
+		check_modifier_value = { modifier = planet_researchers_society_research_produces_mult value > 0.09 }
+		check_modifier_value = { modifier = planet_researchers_engineering_research_produces_mult value > 0.09 }
+		num_districts = { type = district_polytechnic value > 0 }
+		num_free_districts = { type = district_polytechnic value > 0 }
+		num_districts = { type = district_hab_science value > 0 }
+		num_districts = { type = district_rw_science value > 0 }
+		has_carrier_flag = algae_research_commitment_soft
+		has_carrier_flag = algae_research_commitment_hard
+		has_any_research_zone = yes
+		has_building = building_research_lab_1
+		has_building = building_research_lab_2
+		has_building = building_research_lab_3
+		has_building = building_physics_lab_1
+		has_building = building_engineering_facility_1
+		has_building = building_biolab_1
+	}
+}
+
+algae_research_claim_candidate = {
+	is_scope_type = planet
+	is_colony = yes
+	is_capital = no
+	is_special_colony_type = no
+	NOT = { is_planet_class = pc_nanotech }
+	NOT = { has_carrier_flag = algae_research_plan_claimed }
+	NOR = {
+		has_carrier_flag = algae_industry_commitment_hard
+		check_modifier_value = { modifier = planet_researchers_produces_mult value < -0.09 }
+		check_modifier_value = { modifier = planet_researchers_physics_research_produces_mult value < -0.09 }
+		check_modifier_value = { modifier = planet_researchers_society_research_produces_mult value < -0.09 }
+		check_modifier_value = { modifier = planet_researchers_engineering_research_produces_mult value < -0.09 }
+	}
+}
+
+
+
