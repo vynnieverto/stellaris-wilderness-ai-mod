@@ -1,0 +1,236 @@
+ap_hydrocentric = {
+	potential = {
+		has_aquatics = yes
+		NOT = { has_ascension_perk = ap_hydrocentric }
+		OR = {
+			has_trait = trait_pc_ocean_preference
+			has_trait = trait_robot_aquatic
+			has_trait = trait_auto_hab_preference
+		}
+		is_nomadic = no
+	}
+	possible = {
+		has_technology = tech_terrestrial_sculpting
+		OR = {
+			has_trait = trait_aquatic
+			has_trait = trait_robot_aquatic
+			has_trait = trait_auto_hab_preference
+		}
+	}
+
+	on_enabled = {
+		custom_tooltip = ap_hydrocentric_tooltip
+		if = {
+			limit = {
+				host_has_dlc = "Apocalypse"
+			}
+			if = {
+				limit = { has_ascension_perk = ap_colossus }
+				custom_tooltip = ap_hydrocentric_deluge_tooltip
+			}
+			else = {
+				custom_tooltip = ap_hydrocentric_deluge_pre_unlock_tooltip
+			}
+		}
+		hidden_effect = {
+			country_event = { id = aquatics.1 }
+		}
+	}
+
+	modifier = {
+		terraforming_ocean_cost_mult = -0.25
+		add_attunement_the_composer_of_strands = @ascension_perk_attunement1
+	}
+
+	ai_weight = {
+		factor = 80 #it really is quite good for Aquatic species
+		modifier = {
+			factor = 0.5
+			is_xenophobe = no
+			is_hive_empire = no
+		}
+		modifier = {
+			factor = 5
+			has_origin = origin_ocean_paradise
+		}
+		modifier = {
+			factor = 5
+			has_origin = origin_ocean_machines
+		}
+	}
+}
+
+
+
+
+ap_mastery_of_nature = {
+	on_enabled = {
+		custom_tooltip = "describe_decision_mastery_of_nature"
+	}
+	modifier = {
+		deposit_blockers_cost_mult = -0.33
+		add_attunement_the_instrument_of_desire = @ascension_perk_attunement1
+	}
+
+	potential = {
+		NOR = {
+			has_ascension_perk = ap_mastery_of_nature
+			is_environmental_architects_empire = yes
+		}
+	}
+
+	tradition_swap = {
+		inherit_effects = yes
+		inherit_icon = yes
+		name = ap_mastery_of_nature_wilderness
+		trigger = {
+			is_wilderness_empire = yes
+		}
+	}
+
+	tradition_swap = {
+		inherit_effects = no
+		inherit_icon = yes
+		name = ap_mastery_of_nature_nomads
+		trigger = {
+			is_nomadic = yes
+		}
+		modifier = {
+			arkship_harvest_resources_produces_mult = 0.5
+			ship_starbase_stockpile_collection_rate_mult = 0.10
+			add_attunement_the_instrument_of_desire = @ascension_perk_attunement1
+		}
+	}
+
+	ai_weight = {
+		factor = 10
+		modifier = {
+			factor = 0
+			OR = {
+				is_void_dweller_empire = yes
+				has_origin = origin_shattered_ring
+			}
+		}
+		modifier = {
+			factor = 2
+			years_passed > 40
+			num_owned_planets < 5
+		}
+		modifier = {
+			factor = 2
+			years_passed > 80
+			num_owned_planets < 10
+		}
+		modifier = {
+			factor = 7
+			is_wilderness_empire = yes
+		}
+	}
+}
+
+ap_behemoths = {
+	potential = {
+		has_biogenesis_dlc = yes
+		NOR = {
+			is_player_crisis = yes
+			has_ascension_perk = ap_defender_of_the_galaxy
+			has_ascension_perk = ap_defender_of_the_galaxy_nomads
+			has_origin = origin_slavers # No crisis for MSI
+			has_origin = origin_endbringers # No additional crisis for Endbringers
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_3"
+			num_ascension_perks > 2
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		custom_tooltip = {
+			fail_text = "must_use_bioships"
+			country_uses_bio_ships = yes
+		}
+		is_xenophile = no
+		is_pacifist = no
+	}
+
+	on_enabled = {
+		activate_crisis_progression = behemoth_path
+	}
+
+	modifier = {
+		refugee_attraction = -0.50
+	}
+
+	ai_weight = {
+		factor = 7.5
+		modifier = {
+			factor = 0
+			is_xenophile = yes
+			is_spiritualist = yes
+		}
+
+		modifier = {
+			factor = 0.5
+			is_lithoid = yes
+		}
+
+		modifier = {
+			factor = 4
+			is_homicidal = yes
+		}
+
+		modifier = {
+			factor = 5
+			any_playable_country = {
+				has_ascension_perk = ap_defender_of_the_galaxy
+			}
+			NOT = {
+				any_playable_country = {
+					has_ascension_perk = ap_behemoths
+				}
+			}
+		}
+
+		modifier = {
+			factor = 6
+			has_civic = civic_hive_devouring_swarm
+		}
+
+		modifier = {
+			factor = 2
+			has_tradition = tr_enmity_finish
+		}
+		modifier = {
+			factor = 2
+			has_ascension_perk = ap_engineered_evolution
+		}
+		modifier = {
+			factor = 2
+			has_ascension_perk = ap_nihilistic_acquisition
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = eater_covenant_confirmed
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+	}
+}
